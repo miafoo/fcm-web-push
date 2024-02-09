@@ -1,0 +1,47 @@
+{
+  "name": "@miafoo/fcm-web-push",
+  "version": "1.5.0",
+  "private": false,
+  "description": "A very minimal web push notification server using Firebase Cloud Messaging (FCM) for Node (and Electron)",
+  "repository": {
+    "type": "git",
+    "url": "github.com:miafoo/fcm-web-push"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "proto",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "lint": "biome check src",
+    "lint:fix": "biome check src --apply",
+    "proto:generate": "protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_opt=forceLong=bigint --ts_proto_opt=snakeToCamel=false --ts_proto_opt=useSnakeTypeName=false --ts_proto_out=./src/proto -I=./proto ./proto/*.proto",
+    "prepack": "npm run build",
+    "prepublishOnly": "rm -rf dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "fcm",
+    "web-push",
+    "push-notifications",
+    "firebase-cloud-messaging",
+    "node",
+    "electron"
+  ],
+  "author": "Mia",
+  "license": "MIT",
+  "devDependencies": {
+    "@biomejs/biome": "1.5.3",
+    "@types/node": "^20.11.16",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "ts-proto": "^1.167.3"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
