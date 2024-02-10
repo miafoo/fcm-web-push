@@ -1,6 +1,6 @@
 {
   "name": "@miafoo/fcm-web-push",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "private": false,
   "description": "A very minimal web push notification server using Firebase Cloud Messaging (FCM) for Node (and Electron)",
   "repository": {
