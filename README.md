@@ -22,11 +22,11 @@ You can find the first 3 in the Firebase Console when you create a new "Web app"
 See [examples](./examples/) folder for more complete examples than the one below.
 
 ```typescript
-import { register, FcmClient } from "@miafoo/fcm-web-push";
+import { register, FcmClient } from "@miafoo/fcm-web-push"
 
 // Restore persistentIds from the previous session.
-const previousPersistentIds: string[] = readPersistentIdsFromDisk();
-const newPersistentIds: string[] = [];
+const previousPersistentIds: string[] = readPersistentIdsFromDisk()
+const newPersistentIds: string[] = []
 
 // Register the app with Firebase. Ideally you would store this registration
 // and restore it next time you run the app.
@@ -38,39 +38,39 @@ const registration = await register({
   projectId: "xxxx",
   appId: "xxxx",
   vapidKey: "xxxx",
-});
+})
 
 const client = new FcmClient({
   registration,
-});
+})
 
 client.on("connect", () => {
-  console.log("Connecting...");
-});
+  console.log("Connecting...")
+})
 
 client.on("connected", () => {
-  console.log("Connected!");
-});
+  console.log("Connected!")
+})
 
 client.on("disconnected", () => {
-  console.log("Disconnected!");
-});
+  console.log("Disconnected!")
+})
 
 client.on("message", (message) => {
   // Store the `persistentId`!
-  newPersistentIds.push(message.persistentId);
-  console.log(message);
-});
+  newPersistentIds.push(message.persistentId)
+  console.log(message)
+})
 
 // Pass in the `previousPersistentIds` to mark them seen, otheriwse they
 // will be received again every time the client connects.
-await client.connect(previousPersistentIds);
+await client.connect(previousPersistentIds)
 // Note: The `connect` promise resolves when the socket is closed.
 // You can also close the socket manually by disconnecting:
 client.disconnect()
 
 // Save the new persistent ids so we can mark them seen next time we run.
-writePersistentIdsToDisk(newPersistentIds);
+writePersistentIdsToDisk(newPersistentIds)
 ```
 
 # Acknowledgements
