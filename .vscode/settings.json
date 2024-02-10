@@ -1,0 +1,10 @@
+{
+  "editor.defaultFormatter": "biomejs.biome",
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "quickfix.biome": "always",
+      "source.organizeImports.biome": "always"
+    }
+  }
+}
