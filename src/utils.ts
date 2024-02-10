@@ -29,24 +29,21 @@ export function createKeyPair() {
 }
 
 export function encodeRegistration(registration: FcmRegistration) {
-  return JSON.stringify(
-    {
-      gcm: {
-        androidId: registration.gcm.androidId.toString(),
-        securityToken: registration.gcm.securityToken.toString(),
-      },
-      fcm: {
-        token: registration.fcm.token,
-      },
-      keys: {
-        publicKey: registration.keys.publicKey.toString("base64url"),
-        privateKey: registration.keys.privateKey.toString("base64url"),
-        authSecret: registration.keys.authSecret.toString("base64url"),
-      },
+  return JSON.stringify({
+    gcm: {
+      androidId: registration.gcm.androidId.toString(),
+      securityToken: registration.gcm.securityToken.toString(),
     },
-    null,
-    2,
-  )
+    fcm: {
+      token: registration.fcm.token,
+      endpoint: registration.fcm.endpoint,
+    },
+    keys: {
+      publicKey: registration.keys.publicKey.toString("base64url"),
+      privateKey: registration.keys.privateKey.toString("base64url"),
+      authSecret: registration.keys.authSecret.toString("base64url"),
+    },
+  })
 }
 
 export function decodeRegistration(data: string): FcmRegistration {
@@ -58,6 +55,7 @@ export function decodeRegistration(data: string): FcmRegistration {
     },
     fcm: {
       token: registration.fcm.token,
+      endpoint: registration.fcm.endpoint,
     },
     keys: {
       publicKey: Buffer.from(registration.keys.publicKey, "base64url"),

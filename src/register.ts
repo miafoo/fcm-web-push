@@ -11,6 +11,7 @@ export interface FcmRegistration {
   }
   fcm: {
     token: string
+    endpoint: string
   }
   keys: KeyPair
 }
@@ -63,6 +64,7 @@ export async function register({
     },
     fcm: {
       token: fcmRegisterResult.fcm.token,
+      endpoint: fcmRegisterResult.fcm.endpoint,
     },
     keys: fcmRegisterResult.keys,
   }
