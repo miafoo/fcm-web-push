@@ -5,7 +5,7 @@
   "description": "A very minimal web push notification server using Firebase Cloud Messaging (FCM) for Node (and Electron)",
   "repository": {
     "type": "git",
-    "url": "github.com:miafoo/fcm-web-push"
+    "url": "https://github.com/miafoo/fcm-web-push.git"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
