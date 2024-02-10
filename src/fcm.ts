@@ -18,11 +18,8 @@ interface FcmRegisterWeb {
 }
 
 interface FcmRegisterResult {
-  fcm: {
-    token: string
-    endpoint: string
-  }
-  keys: KeyPair
+  token: string
+  endpoint: string
 }
 
 interface FcmRegisterOptions {
@@ -31,7 +28,7 @@ interface FcmRegisterOptions {
   vapidKey: string
   firebaseInstallationToken: string
   gcmToken: string
-  pushKeys?: KeyPair
+  keys: KeyPair
 }
 
 export async function register({
@@ -40,7 +37,7 @@ export async function register({
   vapidKey,
   firebaseInstallationToken,
   gcmToken,
-  pushKeys = createKeyPair(),
+  keys,
 }: FcmRegisterOptions): Promise<FcmRegisterResult> {
   const endpoint = `https://fcm.googleapis.com/fcm/send/${gcmToken}`
 
@@ -48,8 +45,8 @@ export async function register({
     web: {
       endpoint,
       applicationPubKey: vapidKey,
-      auth: pushKeys.authSecret.toString("base64url"),
-      p256dh: pushKeys.publicKey.toString("base64url"),
+      auth: keys.authSecret.toString("base64url"),
+      p256dh: keys.publicKey.toString("base64url"),
     },
   }
 
@@ -73,10 +70,7 @@ export async function register({
   const json: FcmRegisterResponse = await response.json()
 
   return {
-    fcm: {
-      token: json.token,
-      endpoint,
-    },
-    keys: pushKeys,
+    token: json.token,
+    endpoint,
   }
 }

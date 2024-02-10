@@ -2,7 +2,7 @@ import { randomUUID } from "crypto"
 import * as fcm from "./fcm"
 import * as firebaseInstallation from "./firebase-installation"
 import * as gcm from "./gcm"
-import { KeyPair } from "./utils"
+import { KeyPair, createKeyPair } from "./utils"
 
 export interface FcmRegistration {
   gcm: {
@@ -21,6 +21,7 @@ export interface FcmRegistrationOptions {
   projectId: string
   apiKey: string
   vapidKey: string
+  keys?: KeyPair
 }
 
 export async function register({
@@ -28,6 +29,7 @@ export async function register({
   projectId,
   apiKey,
   vapidKey,
+  keys = createKeyPair(),
 }: FcmRegistrationOptions): Promise<FcmRegistration> {
   const checkinResult = await gcm.checkIn({
     androidId: 0n,
@@ -55,6 +57,7 @@ export async function register({
     vapidKey,
     firebaseInstallationToken: firebaseInstallationToken.authToken.token,
     gcmToken,
+    keys,
   })
 
   return {
@@ -63,9 +66,9 @@ export async function register({
       securityToken: checkinResult.security_token,
     },
     fcm: {
-      token: fcmRegisterResult.fcm.token,
-      endpoint: fcmRegisterResult.fcm.endpoint,
+      token: fcmRegisterResult.token,
+      endpoint: fcmRegisterResult.endpoint,
     },
-    keys: fcmRegisterResult.keys,
+    keys,
   }
 }
