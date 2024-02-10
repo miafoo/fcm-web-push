@@ -18,9 +18,10 @@ interface FcmRegisterWeb {
 }
 
 interface FcmRegisterResult {
-  fcmToken: string
+  fcm: {
+    token: string
+  }
   keys: KeyPair
-  endpoint: string
 }
 
 interface FcmRegisterOptions {
@@ -71,8 +72,9 @@ export async function register({
   const json: FcmRegisterResponse = await response.json()
 
   return {
-    fcmToken: json.token,
+    fcm: {
+      token: json.token,
+    },
     keys: pushKeys,
-    endpoint,
   }
 }

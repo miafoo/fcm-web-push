@@ -9,7 +9,9 @@ export interface FcmRegistration {
     androidId: bigint
     securityToken: bigint
   }
-  fcmToken: string
+  fcm: {
+    token: string
+  }
   keys: KeyPair
 }
 
@@ -59,7 +61,9 @@ export async function register({
       androidId: checkinResult.android_id,
       securityToken: checkinResult.security_token,
     },
-    fcmToken: fcmRegisterResult.fcmToken,
+    fcm: {
+      token: fcmRegisterResult.fcm.token,
+    },
     keys: fcmRegisterResult.keys,
   }
 }

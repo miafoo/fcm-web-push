@@ -35,7 +35,9 @@ export function encodeRegistration(registration: FcmRegistration) {
         androidId: registration.gcm.androidId.toString(),
         securityToken: registration.gcm.securityToken.toString(),
       },
-      fcmToken: registration.fcmToken,
+      fcm: {
+        token: registration.fcm.token,
+      },
       keys: {
         publicKey: registration.keys.publicKey.toString("base64url"),
         privateKey: registration.keys.privateKey.toString("base64url"),
@@ -54,7 +56,9 @@ export function decodeRegistration(data: string): FcmRegistration {
       androidId: BigInt(registration.gcm.androidId),
       securityToken: BigInt(registration.gcm.securityToken),
     },
-    fcmToken: registration.fcmToken,
+    fcm: {
+      token: registration.token,
+    },
     keys: {
       publicKey: Buffer.from(registration.keys.publicKey, "base64url"),
       privateKey: Buffer.from(registration.keys.privateKey, "base64url"),
