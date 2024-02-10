@@ -57,7 +57,7 @@ export function decodeRegistration(data: string): FcmRegistration {
       securityToken: BigInt(registration.gcm.securityToken),
     },
     fcm: {
-      token: registration.token,
+      token: registration.fcm.token,
     },
     keys: {
       publicKey: Buffer.from(registration.keys.publicKey, "base64url"),
