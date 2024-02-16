@@ -69,6 +69,8 @@ export class FcmClient {
   private loginVersion: Uint8Array | null = null
   private loginResponse: Mcs.HeartbeatPing | null = null
 
+  private heartbeatInterval: NodeJS.Timeout | null = null
+
   constructor(private options: FcmClientOptions) {
     this.listeners = new EventEmitter()
   }
@@ -105,6 +107,7 @@ export class FcmClient {
     this.socket.setKeepAlive(true)
     this.socket.on("ready", this.onReady)
     this.socket.on("readable", this.onReadable)
+    this.socket.on("error", this.onError)
 
     // Return a promise that resolves when the socket is closed
     return new Promise((resolve) => {
@@ -128,11 +131,18 @@ export class FcmClient {
     this.loginVersion = null
     this.loginResponse = null
     this.persistentIds = []
+    if (this.heartbeatInterval) {
+      clearInterval(this.heartbeatInterval)
+      this.heartbeatInterval = null
+    }
   }
 
   private onReady = () => {
-    this.listeners.emit("connected")
     this.login()
+  }
+
+  private onError = (err: Error) => {
+    // Swallow the error for now.
   }
 
   private onReadable = () => {
@@ -179,8 +189,13 @@ export class FcmClient {
           status: 0n,
         })
 
+        this.listeners.emit("connected")
+
         this.persistentIds = []
         this.heartbeat()
+        this.heartbeatInterval = setInterval(() => {
+          this.heartbeat()
+        }, 60 * 1000)
         break
       }
 
