@@ -89,14 +89,12 @@ export class FcmClient {
   }
 
   public async connect(persistentIds: string[] = []) {
+    this.cleanup()
     this.persistentIds = persistentIds.slice()
-    this.loginVersion = null
-    this.loginResponse = null
 
     // First check in to let GCM know the device is still functioning
     await gcm.checkIn(this.options.registration.gcm)
 
-    // return new Promise((resolve) => {
     this.listeners.emit("connect")
     this.socket = connect({
       host: "mtalk.google.com",
@@ -104,6 +102,7 @@ export class FcmClient {
       rejectUnauthorized: false,
     })
 
+    this.socket.setKeepAlive(true)
     this.socket.on("ready", this.onReady)
     this.socket.on("readable", this.onReadable)
 
@@ -111,13 +110,24 @@ export class FcmClient {
     return new Promise((resolve) => {
       this.socket?.on("close", () => {
         this.listeners.emit("disconnected")
+        this.cleanup()
         resolve(void 0)
       })
     })
   }
 
-  public disconnect() {
-    this.socket?.destroy()
+  public async disconnect() {
+    return new Promise((resolve) => {
+      this.socket?.once("close", () => resolve(void 0))
+      this.socket?.destroy()
+    })
+  }
+
+  private cleanup = () => {
+    this.socket = null
+    this.loginVersion = null
+    this.loginResponse = null
+    this.persistentIds = []
   }
 
   private onReady = () => {

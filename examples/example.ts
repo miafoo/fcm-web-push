@@ -49,8 +49,9 @@ const main = async () => {
   })
 
   // Close the client if someone tries to close the process.
-  process.on("SIGINT", () => {
-    client.disconnect()
+  process.on("SIGINT", async () => {
+    await client.disconnect()
+    process.exit(0)
   })
 
   await client.connect(storedPersistentIds)
